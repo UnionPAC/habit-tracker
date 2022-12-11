@@ -1,11 +1,15 @@
 const express = require("express");
 const app = express();
+const connectDB = require("./config/db");
+
+// Connect Database
+connectDB();
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the Habit Tracker API" });
 });
 
-// Define Routes
+// Routes
 app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/habits", require("./routes/habits"));
