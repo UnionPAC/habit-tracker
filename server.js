@@ -5,9 +5,8 @@ const connectDB = require("./config/db");
 // Connect Database
 connectDB();
 
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to the Habit Tracker API" });
-});
+// Initialize Middleware
+app.use(express.json({ extended: false }));
 
 // Routes
 app.use("/api/users", require("./routes/users"));
