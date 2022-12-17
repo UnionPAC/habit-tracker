@@ -1,19 +1,30 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-// name
-// description
-// current streak
-// longest streak
-
 const habitSchema = new Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
+  },
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   description: {
     type: String,
-    required: false,
+  },
+  currentStreak: {
+    type: Number,
+    default: 0,
+  },
+  longestStreak: {
+    type: Number,
+    default: 0,
+  },
+  dateCreated: {
+    type: Date,
+    default: Date.now,
   },
 });
 
