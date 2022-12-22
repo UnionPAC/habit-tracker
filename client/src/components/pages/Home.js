@@ -1,7 +1,9 @@
+import Habits from "../habits/Habits";
+
 const Home = () => {
   return (
     <div>
-      <p>home</p>
+      <Habits/>
     </div>
   );
 };

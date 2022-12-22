@@ -22,6 +22,20 @@ const habitSchema = new Schema({
     type: Number,
     default: 0,
   },
+  status: {
+    type: Boolean,
+    default: false,
+  },
+  // default 1 = daily
+  frequency: {
+    type: Number,
+    default: 1
+  },
+  // default 1 = 1x per day
+  numPerFrequency: {
+    type: Number,
+    default: 1
+  },
   dateCreated: {
     type: Date,
     default: Date.now,
