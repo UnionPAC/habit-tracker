@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-const Navbar = ({ title }) => {
+const Navbar = () => {
   return (
-    <div className="flex justify-between bg-blue-800 min-h-[10vh] px-20">
+    <div className="flex justify-between bg-blue-800 h-[10vh] px-20">
       <div className=" flex justify-center items-center">
         <Link to="/">
           <span className="text-3xl font-semibold text-white tracking-wide">

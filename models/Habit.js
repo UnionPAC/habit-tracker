@@ -22,19 +22,24 @@ const habitSchema = new Schema({
     type: Number,
     default: 0,
   },
-  status: {
-    type: Boolean,
-    default: false,
-  },
-  // default 1 = daily
+  // 1 = daily, 7 = weekly
   frequency: {
     type: Number,
-    default: 1
+    default: 1,
+    require: true
   },
-  // default 1 = 1x per day
   numPerFrequency: {
     type: Number,
-    default: 1
+    default: 1,
+    require: true
+  },
+  currentCompletion: {
+    type: Number,
+    default: 0,
+  },
+  isCompleted: {
+    type: Boolean,
+    default: false,
   },
   dateCreated: {
     type: Date,
