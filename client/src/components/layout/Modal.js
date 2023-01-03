@@ -1,26 +1,44 @@
-import { useState } from "react";
-import { addHabit, useHabits } from "../../context/habit/HabitState";
+import { useState, useEffect } from "react";
+import {
+  addHabit,
+  updateHabit,
+  useHabits,
+  clearCurrent,
+} from "../../context/habit/HabitState";
 
 const initialHabit = {
-  id: "",
   name: "",
   description: "",
-  recurring: "",
-  frequency: "",
 };
 
 const Modal = ({ isOpen, setIsOpen }) => {
   const [habitState, habitDispatch] = useHabits();
 
+  const { current } = habitState;
+
+  useEffect(() => {
+    if (current) {
+      setHabit(current);
+    } else {
+      setHabit(initialHabit);
+    }
+  }, [current]);
+
   const [habit, setHabit] = useState(initialHabit);
 
-  const { name, description, recurring, frequency } = habit;
+  const { name, description } = habit;
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    await addHabit(habitDispatch, habit);
-    setHabit(initialHabit);
-    setIsOpen(!isOpen);
+    if (!current) {
+      addHabit(habitDispatch, habit);
+      setHabit(initialHabit);
+      setIsOpen(!isOpen);
+    } else {
+      updateHabit(habitDispatch, habit);
+      clearAll();
+      setIsOpen(!isOpen);
+    }
   };
 
   const handleChange = (e) => {
@@ -29,21 +47,35 @@ const Modal = ({ isOpen, setIsOpen }) => {
     setHabit((values) => ({ ...values, [name]: value }));
   };
 
+  const clearAll = () => {
+    clearCurrent(habitDispatch);
+  };
+
   return (
     <div className="fixed h-full w-full bg-black/80 z-10">
       <div className="fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[500px] h-[660px] bg-white text-black rounded z-20">
         <button
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => {
+            setIsOpen(!isOpen);
+            clearAll();
+          }}
           className="fixed top-6 right-8"
         >
           <i className="fa-solid fa-x cursor-pointer text-gray-600"></i>
         </button>
-        <form className="flex flex-col  mt-12 max-w-[400px] mx-auto">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col  mt-12 max-w-[400px] mx-auto"
+        >
+          <h2 className="mb-6 text-2xl font-semibold">
+            {current ? "update habit" : "add habit"}
+          </h2>
           <label className="text-sm py-2" htmlFor="name">
             name
           </label>
           <input
-            value={name}
+            required
+            value={name || ""}
             onChange={handleChange}
             type="text"
             id="name"
@@ -55,7 +87,8 @@ const Modal = ({ isOpen, setIsOpen }) => {
             description
           </label>
           <input
-            value={description}
+            required
+            value={description || ""}
             onChange={handleChange}
             type="text"
             id="description"
@@ -63,47 +96,11 @@ const Modal = ({ isOpen, setIsOpen }) => {
             autoComplete="off"
             className="border-b-2 border-gray-100 focus:outline-none mb-8 py-1"
           />
-          <label className=" py-2 text-sm" htmlFor="recurring">
-            recurring
-          </label>
-          <select
-            onChange={handleChange}
-            name="recurring"
-            value={recurring}
-            className="border-b-2 border-gray-100 focus:outline-none mb-8 py-1"
-          >
-            <option disabled={true} value="">
-              please choose an interval
-            </option>
-            <option value="daily">daily</option>
-            <option value="weekly">weekly</option>
-            <option value="monthly">monthly</option>
-          </select>
-          <label className=" py-2 text-sm" htmlFor="frequency">
-            frequency
-          </label>
-          <input
-            value={frequency}
-            onChange={handleChange}
-            type="number"
-            id="frequency"
-            name="frequency"
-            autoComplete="off"
-            className="border-b-2 border-gray-100 focus:outline-none py-1 mb-8"
-          />
-          <p className="text-md italic text-center">
-            {frequency === "" ||
-            frequency === undefined ||
-            recurring === "" ||
-            recurring === undefined
-              ? ""
-              : `i want to do this habit ${frequency}x ${recurring}  🚀  `}
-          </p>
           <button
-            className="fixed bottom-10 left-0 translate-x-[135%] py-3 px-8 bg-green-400 active:scale-95 rounded"
-            onClick={handleSubmit}
+            type="submit"
+            className="fixed bottom-10 left-0 translate-x-[105%] py-3 px-8 bg-green-400 active:scale-95 rounded text-gray-800"
           >
-            add habit
+            {current ? "update habit" : "create habit"}
           </button>
         </form>
       </div>

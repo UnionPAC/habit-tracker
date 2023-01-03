@@ -3,7 +3,7 @@ import SingleHabit from "./SingleHabit";
 import spongebobWaiting from "../../imgs/spongebob-waiting.gif";
 import { useHabits } from "../../context/habit/HabitState";
 
-const Habits = () => {
+const Habits = ({ isOpen, setIsOpen }) => {
   const [habitState, habitDispatch] = useHabits();
   const { habits } = habitState;
 
@@ -17,15 +17,17 @@ const Habits = () => {
             width="580px"
             height="424px"
           />
-          <p className="pt-4 text-lg font-semibold">
-            you don't have any habits yet ...
-          </p>
+          <p className="pt-4 text-lg">you don't have any habits ...</p>
         </div>
       ) : (
         habits.map((habit, index) => {
           return (
             <div key={index}>
-              <SingleHabit habit={habit} />
+              <SingleHabit
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                habit={habit}
+              />
             </div>
           );
         })

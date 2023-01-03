@@ -4,8 +4,6 @@ import {
   SET_CURRENT,
   CLEAR_CURRENT,
   UPDATE_HABIT,
-  FILTER_HABITS,
-  CLEAR_FILTER,
 } from "../types";
 
 const habitReducer = (state, action) => {
@@ -14,6 +12,28 @@ const habitReducer = (state, action) => {
       return {
         ...state,
         habits: [...state.habits, action.payload],
+      };
+    case UPDATE_HABIT:
+      return {
+        ...state,
+        habits: state.habits.map((habit) =>
+          habit.id === action.payload.id ? action.payload : habit
+        ),
+      };
+    case DELETE_HABIT:
+      return {
+        ...state,
+        habits: state.habits.filter((habit) => habit.id !== action.payload),
+      };
+    case SET_CURRENT:
+      return {
+        ...state,
+        current: action.payload,
+      };
+    case CLEAR_CURRENT:
+      return {
+        ...state,
+        current: null,
       };
     default:
       throw new Error(`unsupported type of ${action.type}`);
