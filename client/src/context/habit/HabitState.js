@@ -58,21 +58,21 @@ export const clearCurrent = (dispatch) => {
 const HabitState = (props) => {
   const initialState = {
     habits: [
-      {
-        id: 1,
-        name: "reading",
-        description: "read at least 15 minutes per day",
-      },
-      {
-        id: 2,
-        name: "stop smoking",
-        description: "i want to quit smoking for good",
-      },
-      {
-        id: 3,
-        name: "yoga training",
-        description: "do yoga 3 times per week ",
-      },
+      // {
+      //   id: 1,
+      //   name: "reading",
+      //   description: "read at least 15 minutes per day",
+      // },
+      // {
+      //   id: 2,
+      //   name: "stop smoking",
+      //   description: "i want to quit smoking for good",
+      // },
+      // {
+      //   id: 3,
+      //   name: "yoga training",
+      //   description: "do yoga 3 times per week ",
+      // },
     ],
     current: null,
   };

@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+label {
+  color: white;
+}
+
+input {
+  color: black;
+}
+
+.alert-fail {
+  background-color: #fb685d;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",

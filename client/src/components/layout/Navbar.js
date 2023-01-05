@@ -12,7 +12,7 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="flex justify-center items-center">
-        <ul className="flex space-x-12 text-white">
+        <ul className="flex space-x-12 text-white tracking-wider">
           <li>
             <Link to="/about">about</Link>
           </li>

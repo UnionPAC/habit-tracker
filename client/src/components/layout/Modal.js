@@ -70,7 +70,7 @@ const Modal = ({ isOpen, setIsOpen }) => {
           <h2 className="mb-6 text-2xl font-semibold">
             {current ? "update habit" : "add habit"}
           </h2>
-          <label className="text-sm py-2" htmlFor="name">
+          <label className="text-sm py-2 text-black" htmlFor="name">
             name
           </label>
           <input
@@ -83,7 +83,7 @@ const Modal = ({ isOpen, setIsOpen }) => {
             autoComplete="off"
             className="border-b-2 border-gray-100 focus:outline-none mb-8 py-1"
           />
-          <label className=" py-2 text-sm" htmlFor="description">
+          <label className=" py-2 text-sm text-black" htmlFor="description">
             description
           </label>
           <input
