@@ -4,6 +4,7 @@ import {
   SET_CURRENT,
   CLEAR_CURRENT,
   UPDATE_HABIT,
+  CLEAR_HABITS,
 } from "../types";
 
 const habitReducer = (state, action) => {
@@ -24,6 +25,12 @@ const habitReducer = (state, action) => {
       return {
         ...state,
         habits: state.habits.filter((habit) => habit.id !== action.payload),
+      };
+    case CLEAR_HABITS:
+      return {
+        ...state,
+        habits: null,
+        current: null,
       };
     case SET_CURRENT:
       return {

@@ -38,13 +38,21 @@ const SingleHabit = ({ habit, isOpen, setIsOpen }) => {
         )}
       </div>
       <div className="flex flex-col">
-        <button onClick={onEdit} className="m-2 py-3 px-8 bg-blue-400 rounded active:scale-95">
+        <button
+          onClick={onEdit}
+          className="m-2 py-3 px-8 bg-blue-400 rounded active:scale-95"
+        >
           edit
         </button>
-        <button onClick={onDelete} className="m-2 py-3 px-8 bg-red-400 rounded active:scale-95">
+        <button
+          onClick={onDelete}
+          className="m-2 py-3 px-8 bg-red-400 rounded active:scale-95"
+        >
           delete
         </button>
-        <button className="m-2 p-2 rounded bg-green-400 active:scale-95">✔️</button>
+        <button className="m-2 p-2 rounded bg-green-400 active:scale-95">
+          ✔️
+        </button>
       </div>
     </div>
   );

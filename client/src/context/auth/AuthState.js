@@ -1,6 +1,8 @@
 import { useContext, useReducer, useEffect } from "react";
+import axios from "axios";
 import authReducer from "./authReducer";
 import AuthContext from "./authContext";
+import setAuthToken from "../../utils/setAuthToken";
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -20,44 +22,65 @@ export const useAuth = () => {
 
 // ACTIONS
 
-// register user
-export const registerUser = (dispatch, user) => {
+// load user
+export const loadUser = async (dispatch) => {
   try {
+    const res = await axios.get("/api/auth");
+    dispatch({
+      type: USER_LOADED,
+      // payload is the user
+      payload: res.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: AUTH_ERROR,
+    });
+  }
+};
+
+// register user
+export const registerUser = async (dispatch, formData) => {
+  try {
+    const res = await axios.post("/api/users", formData);
     dispatch({
       type: REGISTER_SUCCESS,
-      payload: user,
+      payload: res.data,
     });
   } catch (error) {
     dispatch({
       type: REGISTER_FAIL,
-      payload: error,
+      payload: error.response.data.message,
     });
   }
 };
 
 // login user
-export const loginUser = (dispatch, user) => {
+export const loginUser = async (dispatch, formData) => {
   try {
+    const res = await axios.post("/api/auth", formData);
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: user,
+      payload: res.data,
     });
   } catch (error) {
     dispatch({
       type: LOGIN_FAIL,
-      payload: error,
+      payload: error.response.data.message,
     });
   }
 };
 
-// load user
-export const loadUser = () => {};
-
-// logout user
-export const logoutUser = () => {};
+// logout
+export const logout = (dispatch) => {
+  dispatch({
+    type: LOGOUT,
+  });
+};
 
 // clear errors
-export const clearError = () => {};
+export const clearErrors = (dispatch) => {
+  dispatch({ type: CLEAR_ERRORS });
+};
 
 const AuthState = (props) => {
   const initialState = {
@@ -70,12 +93,17 @@ const AuthState = (props) => {
 
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  // set token on init load
+  setAuthToken(state.token);
 
-  // load user on first run or page refresh
+  if (state.loading) {
+    if (state.token) {
+      loadUser(dispatch);
+    }
+  }
 
-  // update token on any change
-  useEffect(() => {});
+  useEffect(() => {
+    setAuthToken(state.token);
+  }, [state.token]);
 
   return (
     <AuthContext.Provider value={{ state: state, dispatch }}>

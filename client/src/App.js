@@ -5,6 +5,7 @@ import About from "./components/pages/About";
 import Signup from "./components/auth/Signup";
 import Login from "./components/auth/Login";
 import Alerts from "./components/layout/Alerts";
+import PrivateRoute from "./components/routing/PrivateRoute";
 
 import HabitState from "./context/habit/HabitState";
 import AuthState from "./context/auth/AuthState";
@@ -21,7 +22,7 @@ const App = () => {
               <div className="text-white bg-[#1d1d1d]">
                 <Alerts />
                 <Routes>
-                  <Route path="/" element={<Home />} />
+                  <Route path="/" element={<PrivateRoute component={Home} />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/signup" element={<Signup />} />
                   <Route path="/login" element={<Login />} />

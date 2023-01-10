@@ -8,6 +8,7 @@ import {
   DELETE_HABIT,
   SET_CURRENT,
   CLEAR_CURRENT,
+  CLEAR_HABITS,
 } from "../types";
 
 export const useHabits = () => {
@@ -52,6 +53,12 @@ export const setCurrent = (dispatch, habit) => {
 export const clearCurrent = (dispatch) => {
   dispatch({
     type: CLEAR_CURRENT,
+  });
+};
+
+export const clearHabits = (dispatch) => {
+  dispatch({
+    type: CLEAR_HABITS,
   });
 };
 

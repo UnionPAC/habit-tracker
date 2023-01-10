@@ -1,12 +1,26 @@
 import { useState, useEffect, useContext } from "react";
+import { Navigate } from "react-router-dom";
 import AlertContext from "../../context/alert/alertContext";
-import { registerUser, useAuth } from "../../context/auth/AuthState";
+import {
+  registerUser,
+  useAuth,
+  clearErrors,
+} from "../../context/auth/AuthState";
 
 const Signup = () => {
   const alertContext = useContext(AlertContext);
   const [authState, authDispatch] = useAuth();
 
+  const { error, isAuthed } = authState;
+
   const { setAlert } = alertContext;
+
+  useEffect(() => {
+    if (error === "user already exists") {
+      setAlert(error, "fail");
+      clearErrors(authDispatch);
+    }
+  }, [error, setAlert]);
 
   const [user, setUser] = useState({
     name: "",
@@ -17,6 +31,12 @@ const Signup = () => {
 
   const { name, email, password, confirmPassword } = user;
 
+  const onChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setUser({ ...user, [name]: value });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (name === "" || email === "" || password === "") {
@@ -24,19 +44,12 @@ const Signup = () => {
     } else if (password !== confirmPassword) {
       setAlert("passwords must match", "fail");
     } else {
-      console.log("register user");
       registerUser(authDispatch, { name, email, password });
     }
   };
 
-  const onChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    setUser({ ...user, [name]: value });
-  };
+  if (isAuthed) return <Navigate to="/" />;
 
-  // what does the form need?
-  // name, email, password, confirm password
   return (
     <div className="flex flex-col items-center min-h-[90vh] pb-20">
       <h1 className="text-3xl font-semibold mt-10 mb-4">signup</h1>
@@ -104,7 +117,7 @@ const Signup = () => {
             autoComplete="off"
             className="p-2 rounded-sm"
             required
-            minLength='6'
+            minLength="6"
           />
         </div>
         <input

@@ -1,8 +1,26 @@
-import { useState } from "react";
-import { loginUser, useAuth } from "../../context/auth/AuthState";
+import { useContext, useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
+import { clearErrors, useAuth } from "../../context/auth/AuthState";
+import AlertContext from "../../context/alert/alertContext";
+import { loginUser } from "../../context/auth/AuthState";
+
+// potential login errors
+// 1. no user found with that email
+// 2. invalid login & password
 
 const Login = () => {
+  const alertContext = useContext(AlertContext);
   const [authState, authDispatch] = useAuth();
+
+  const { error, isAuthed } = authState;
+  const { setAlert } = alertContext;
+
+  useEffect(() => {
+    if (error) {
+      setAlert(error, "fail");
+      clearErrors(error);
+    }
+  }, [error]);
 
   const [user, setUser] = useState({
     email: "",
@@ -13,7 +31,11 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    loginUser(authDispatch, user);
+    if (email === "" || password === "") {
+      setAlert("please enter email and password", "fail");
+    } else {
+      loginUser(authDispatch, { email, password });
+    }
   };
 
   const onChange = (e) => {
@@ -21,6 +43,8 @@ const Login = () => {
     const value = e.target.value;
     setUser({ ...user, [name]: value });
   };
+
+  if (isAuthed) return <Navigate to="/" />;
 
   return (
     <div className="flex flex-col items-center min-h-[90vh] pb-20">
