@@ -1,5 +1,5 @@
 import { useContext, useReducer } from "react";
-import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
 import HabitContext from "./habitContext";
 import habitReducer from "./habitReducer";
 import {
@@ -9,6 +9,8 @@ import {
   SET_CURRENT,
   CLEAR_CURRENT,
   CLEAR_HABITS,
+  HABIT_ERROR,
+  GET_HABITS,
 } from "../types";
 
 export const useHabits = () => {
@@ -16,29 +18,69 @@ export const useHabits = () => {
   return [state, dispatch];
 };
 
+// get habits
+export const getHabits = async (dispatch) => {
+  try {
+    const res = await axios.get("/api/habits");
+    dispatch({
+      type: GET_HABITS,
+      payload: res.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: HABIT_ERROR,
+      payload: error.response.data.message,
+    });
+  }
+};
+
 // add habit
-export const addHabit = (dispatch, habit) => {
-  habit.id = uuidv4();
-  dispatch({
-    type: ADD_HABIT,
-    payload: habit,
-  });
+export const addHabit = async (dispatch, habit) => {
+  try {
+    const res = await axios.post("/api/habits", habit);
+    dispatch({
+      type: ADD_HABIT,
+      payload: res.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: HABIT_ERROR,
+      payload: error,
+    });
+    console.log(error);
+  }
 };
 
 // update habit
-export const updateHabit = (dispatch, habit) => {
-  dispatch({
-    type: UPDATE_HABIT,
-    payload: habit,
-  });
+export const updateHabit = async (dispatch, habit) => {
+  try {
+    const res = await axios.put(`/api/habits/${habit._id}`, habit);
+    dispatch({
+      type: UPDATE_HABIT,
+      payload: res.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: HABIT_ERROR,
+      payload: error.response.data.message,
+    });
+  }
 };
 
 // delete habit
-export const deleteHabit = (dispatch, id) => {
-  dispatch({
-    type: DELETE_HABIT,
-    payload: id,
-  });
+export const deleteHabit = async (dispatch, id) => {
+  try {
+    await axios.delete(`/api/habits/${id}`);
+    dispatch({
+      type: DELETE_HABIT,
+      payload: id,
+    });
+  } catch (error) {
+    dispatch({
+      type: HABIT_ERROR,
+      payload: error.response.data.message,
+    });
+  }
 };
 
 // set current habit
@@ -82,6 +124,7 @@ const HabitState = (props) => {
       // },
     ],
     current: null,
+    error: null,
   };
 
   const [state, dispatch] = useReducer(habitReducer, initialState);

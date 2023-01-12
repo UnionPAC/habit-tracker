@@ -7,12 +7,12 @@ import {
 } from "../../context/habit/HabitState";
 
 const SingleHabit = ({ habit, isOpen, setIsOpen }) => {
-  const { id, name, description, currentStreak, longestStreak } = habit;
+  const { _id, name, description, currentStreak, longestStreak } = habit;
 
-  const [habitState, habitDispatch] = useHabits();
+  const habitDispatch = useHabits()[1];
 
   const onDelete = () => {
-    deleteHabit(habitDispatch, id);
+    deleteHabit(habitDispatch, _id);
     clearCurrent(habitDispatch);
   };
 
@@ -22,20 +22,18 @@ const SingleHabit = ({ habit, isOpen, setIsOpen }) => {
   };
 
   return (
-    <div className="flex justify-between max-w-[600px] mx-auto p-4 bg-stone-100 text-black rounded">
+    <div className="flex mb-8">
       <div className="pr-6">
-        <h3 className="text-xl font-semibold font-mono mb-2">{name}</h3>
+        <h3 className="text-xl font-semibold mb-2">{name}</h3>
         <p className="text-md">{description}</p>
-        {currentStreak && (
-          <div>
-            current streak: {currentStreak === 0 ? 0 : `${currentStreak} 🔥`}
-          </div>
-        )}
-        {longestStreak && (
-          <div>
-            longest streak: {longestStreak === 0 ? 0 : `${longestStreak} ⭐️`}
-          </div>
-        )}
+        <p className="pt-4">
+          current streak:{" "}
+          {currentStreak > 0 ? `${currentStreak} 🔥` : currentStreak}
+        </p>
+        <p className="pt-4">
+          longest streak:{" "}
+          {longestStreak > 0 ? `${longestStreak} 🔥` : longestStreak}
+        </p>
       </div>
       <div className="flex flex-col">
         <button
@@ -49,9 +47,6 @@ const SingleHabit = ({ habit, isOpen, setIsOpen }) => {
           className="m-2 py-3 px-8 bg-red-400 rounded active:scale-95"
         >
           delete
-        </button>
-        <button className="m-2 p-2 rounded bg-green-400 active:scale-95">
-          ✔️
         </button>
       </div>
     </div>

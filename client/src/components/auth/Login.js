@@ -18,7 +18,7 @@ const Login = () => {
   useEffect(() => {
     if (error) {
       setAlert(error, "fail");
-      clearErrors(error);
+      clearErrors(authDispatch);
     }
   }, [error]);
 

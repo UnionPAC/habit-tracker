@@ -46,7 +46,7 @@ const Navbar = () => {
   return (
     <div className="flex justify-between bg-blue-800 h-[10vh] px-20">
       <div className=" flex justify-center items-center">
-        <Link to="/">
+        <Link to={isAuthed ? "/" : "/login"}>
           <span className="text-3xl font-semibold text-white tracking-wide">
             habit tracker
           </span>

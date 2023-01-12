@@ -28,14 +28,14 @@ const Modal = ({ isOpen, setIsOpen }) => {
 
   const { name, description } = habit;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!current) {
-      addHabit(habitDispatch, habit);
+      await addHabit(habitDispatch, habit);
       setHabit(initialHabit);
       setIsOpen(!isOpen);
     } else {
-      updateHabit(habitDispatch, habit);
+      await updateHabit(habitDispatch, habit);
       clearAll();
       setIsOpen(!isOpen);
     }

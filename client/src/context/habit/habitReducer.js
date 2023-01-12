@@ -5,10 +5,17 @@ import {
   CLEAR_CURRENT,
   UPDATE_HABIT,
   CLEAR_HABITS,
+  HABIT_ERROR,
+  GET_HABITS,
 } from "../types";
 
 const habitReducer = (state, action) => {
   switch (action.type) {
+    case GET_HABITS:
+      return {
+        ...state,
+        habits: action.payload,
+      };
     case ADD_HABIT:
       return {
         ...state,
@@ -24,12 +31,17 @@ const habitReducer = (state, action) => {
     case DELETE_HABIT:
       return {
         ...state,
-        habits: state.habits.filter((habit) => habit.id !== action.payload),
+        habits: state.habits.filter((habit) => habit._id !== action.payload),
+      };
+    case HABIT_ERROR:
+      return {
+        ...state,
+        error: action.payload,
       };
     case CLEAR_HABITS:
       return {
         ...state,
-        habits: null,
+        habits: [],
         current: null,
       };
     case SET_CURRENT:
