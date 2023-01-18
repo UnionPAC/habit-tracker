@@ -4,7 +4,7 @@
   "description": "A place to build and grow habits",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
@@ -23,7 +23,9 @@
     "mongoose": "^6.8.0"
   },
   "devDependencies": {
+    "chai": "^4.3.7",
     "concurrently": "^7.6.0",
+    "mocha": "^10.2.0",
     "nodemon": "^2.0.20"
   }
 }

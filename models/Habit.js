@@ -22,6 +22,26 @@ const habitSchema = new Schema({
     type: Number,
     default: 0,
   },
+  recurring: {
+    type: String,
+    default: "daily",
+  },
+  goalCompletion: {
+    type: Number,
+    default: 1,
+  },
+  currentCompletion: {
+    type: Number,
+    default: 0,
+  },
+  isComplete: {
+    type: Boolean,
+    default: false,
+  },
+  intervalStart: {
+    type: Number,
+    default: Date.now(),
+  },
   dateCreated: {
     type: Date,
     default: Date.now,

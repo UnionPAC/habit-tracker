@@ -15,7 +15,7 @@ const Habits = ({ isOpen, setIsOpen }) => {
       setLoadingHabits(false);
     };
     loadHabits();
-  }, [habitDispatch]);
+  }, []);
 
   return (
     <Fragment>

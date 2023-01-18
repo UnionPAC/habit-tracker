@@ -32,16 +32,26 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, description } = req.body;
+    const { name, description, recurring, goalCompletion } = req.body;
 
     try {
-      const newHabit = new Habit({
+      let habit = await Habit.findOne({ name });
+
+      if (habit) {
+        return res
+          .status(400)
+          .json({ message: "habit with this name already exists" });
+      }
+
+      habit = new Habit({
         name,
         description,
+        recurring,
+        goalCompletion,
         user: req.user.id,
       });
 
-      const habit = await newHabit.save();
+      await habit.save();
       res.json(habit);
     } catch (error) {
       console.log(error);
@@ -54,14 +64,34 @@ router.post(
 // @desc    Update a habit
 // @access  Private
 router.put("/:id", auth, async (req, res) => {
-  const { name, description } = req.body;
+  const {
+    name,
+    description,
+    recurring,
+    goalCompletion,
+    currentCompletion,
+    isComplete,
+    currentStreak,
+    longestStreak,
+  } = req.body;
 
   // Build habit object
   const habitFields = {};
 
   if (name) habitFields.name = name;
   if (description) habitFields.description = description;
+  if (recurring) habitFields.recurring = recurring;
+  if (goalCompletion) habitFields.goalCompletion = goalCompletion;
+  if (currentCompletion) habitFields.currentCompletion = currentCompletion;
+  if (isComplete) {
+    habitFields.isComplete = true;
+  } else {
+    habitFields.isComplete = false;
+  }
+  if (currentStreak) habitFields.currentStreak = currentStreak;
+  if (longestStreak) habitFields.longestStreak = longestStreak;
 
+  
   try {
     let habit = await Habit.findById(req.params.id);
 

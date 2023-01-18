@@ -7,6 +7,7 @@ import {
   CLEAR_HABITS,
   HABIT_ERROR,
   GET_HABITS,
+  CLEAR_ERRORS,
 } from "../types";
 
 const habitReducer = (state, action) => {
@@ -53,6 +54,11 @@ const habitReducer = (state, action) => {
       return {
         ...state,
         current: null,
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
       };
     default:
       throw new Error(`unsupported type of ${action.type}`);

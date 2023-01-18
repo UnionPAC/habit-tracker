@@ -9,6 +9,8 @@ import {
 const initialHabit = {
   name: "",
   description: "",
+  recurring: "daily",
+  goalCompletion: 1,
 };
 
 const Modal = ({ isOpen, setIsOpen }) => {
@@ -26,7 +28,7 @@ const Modal = ({ isOpen, setIsOpen }) => {
 
   const [habit, setHabit] = useState(initialHabit);
 
-  const { name, description } = habit;
+  const { name, description, recurring, goalCompletion } = habit;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,7 +72,10 @@ const Modal = ({ isOpen, setIsOpen }) => {
           <h2 className="mb-6 text-2xl font-semibold">
             {current ? "update habit" : "add habit"}
           </h2>
-          <label className="text-sm py-2 text-black" htmlFor="name">
+          <label
+            className="text-sm py-2 text-gray-700 font-semibold"
+            htmlFor="name"
+          >
             name
           </label>
           <input
@@ -83,7 +88,10 @@ const Modal = ({ isOpen, setIsOpen }) => {
             autoComplete="off"
             className="border-b-2 border-gray-100 focus:outline-none mb-8 py-1"
           />
-          <label className=" py-2 text-sm text-black" htmlFor="description">
+          <label
+            className="text-sm py-2 text-gray-700 font-semibold"
+            htmlFor="description"
+          >
             description
           </label>
           <input
@@ -96,6 +104,41 @@ const Modal = ({ isOpen, setIsOpen }) => {
             autoComplete="off"
             className="border-b-2 border-gray-100 focus:outline-none mb-8 py-1"
           />
+
+          <label
+            className="text-sm py-2 text-gray-700 font-semibold"
+            htmlFor="recurring"
+          >
+            how often will this habit recur?
+          </label>
+          <select
+            name="recurring"
+            value={recurring || ""}
+            onChange={handleChange}
+            className="border-b-2 border-gray-100 focus:outline-none mb-8 py-1"
+          >
+            <option value="daily">daily</option>
+            <option value="weekly">weekly</option>
+            <option value="monthly">monthly</option>
+          </select>
+
+          <label
+            className="text-sm py-2 text-gray-700 font-semibold"
+            htmlFor="goalCompletion"
+          >
+            how many times do you want to perform this habit?
+          </label>
+          <input
+            required
+            value={goalCompletion || ""}
+            onChange={handleChange}
+            type="number"
+            id="goalCompletion"
+            autoComplete="off"
+            className="border-b-2 border-gray-100 focus:outline-none mb-8 py-1"
+            name="goalCompletion"
+          />
+
           <button
             type="submit"
             className="fixed bottom-10 left-0 translate-x-[105%] py-3 px-8 bg-green-400 active:scale-95 rounded text-gray-800"

@@ -11,6 +11,7 @@ import {
   CLEAR_HABITS,
   HABIT_ERROR,
   GET_HABITS,
+  CLEAR_ERRORS,
 } from "../types";
 
 export const useHabits = () => {
@@ -45,7 +46,7 @@ export const addHabit = async (dispatch, habit) => {
   } catch (error) {
     dispatch({
       type: HABIT_ERROR,
-      payload: error,
+      payload: error.response.data.message,
     });
     console.log(error);
   }
@@ -104,25 +105,14 @@ export const clearHabits = (dispatch) => {
   });
 };
 
+// clear errors
+export const clearErrors = (dispatch) => {
+  dispatch({ type: CLEAR_ERRORS });
+};
+
 const HabitState = (props) => {
   const initialState = {
-    habits: [
-      // {
-      //   id: 1,
-      //   name: "reading",
-      //   description: "read at least 15 minutes per day",
-      // },
-      // {
-      //   id: 2,
-      //   name: "stop smoking",
-      //   description: "i want to quit smoking for good",
-      // },
-      // {
-      //   id: 3,
-      //   name: "yoga training",
-      //   description: "do yoga 3 times per week ",
-      // },
-    ],
+    habits: [],
     current: null,
     error: null,
   };

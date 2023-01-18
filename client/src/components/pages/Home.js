@@ -1,9 +1,24 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Habits from "../habits/Habits";
 import Modal from "../layout/Modal";
+import { useHabits, clearErrors } from "../../context/habit/HabitState";
+import AlertContext from "../../context/alert/alertContext";
 
 const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const alertContext = useContext(AlertContext);
+  const { setAlert } = alertContext;
+
+  const [habitState, habitDispatch] = useHabits();
+  const { error } = habitState;
+
+  useEffect(() => {
+    if (error) {
+      setAlert(error, "fail");
+      clearErrors(habitDispatch);
+    }
+  }, [error]);
 
   return (
     <div className="flex flex-col min-h-[90vh] pb-20">

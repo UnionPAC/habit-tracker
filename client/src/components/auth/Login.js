@@ -1,8 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { clearErrors, useAuth } from "../../context/auth/AuthState";
+import { clearErrors, useAuth, loginUser } from "../../context/auth/AuthState";
 import AlertContext from "../../context/alert/alertContext";
-import { loginUser } from "../../context/auth/AuthState";
 
 // potential login errors
 // 1. no user found with that email
