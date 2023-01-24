@@ -1,0 +1,8 @@
+{
+  "short_name": "habit tracker",
+  "name": "a simple app to help you track your habits!",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

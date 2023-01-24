@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.026845fd.css",
+    "main.js": "/static/js/main.21167262.js",
+    "static/media/spongebob-waiting.gif": "/static/media/spongebob-waiting.8f40b925661dc4700b02.gif",
+    "index.html": "/index.html",
+    "main.026845fd.css.map": "/static/css/main.026845fd.css.map",
+    "main.21167262.js.map": "/static/js/main.21167262.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.026845fd.css",
+    "static/js/main.21167262.js"
+  ]
+}
