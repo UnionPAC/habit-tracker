@@ -5,3 +5,4 @@ config/\
 package-lock.json
 .env
 default.json
+production.json
