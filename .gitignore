@@ -3,3 +3,5 @@ node_modules/
 /client/build
 config/\
 package-lock.json
+.env
+/config/default.json
