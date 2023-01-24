@@ -6,7 +6,7 @@ import { clearHabits, useHabits } from "../../context/habit/HabitState";
 
 const Navbar = () => {
   const [authState, authDispatch] = useAuth();
-  const { isAuthed, user } = authState;
+  const { isAuthed } = authState;
 
   // habit dispatch w/o state
   const habitDispatch = useHabits()[1];

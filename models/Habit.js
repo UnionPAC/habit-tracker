@@ -38,9 +38,9 @@ const habitSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  intervalStart: {
-    type: Number,
-    default: Date.now(),
+  lastUpdated: {
+    type: Date,
+    default: Date.now,
   },
   dateCreated: {
     type: Date,

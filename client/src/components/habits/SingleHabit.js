@@ -1,21 +1,20 @@
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   useHabits,
   deleteHabit,
   setCurrent,
   clearCurrent,
   updateHabit,
-  getHabits,
 } from "../../context/habit/HabitState";
 
-const DAY_IN_MILLISECONDS = "86400000";
-const WEEK_IN_MILLISECONDS = "604800000";
-const MONTH_IN_MILLISECONDS = "2629746000";
+const SECOND_IN_MILLISECONDS = 1000;
+const MINUTE_IN_MILLISECONDS = 60000;
+const DAY_IN_MILLISECONDS = 86400000;
+const WEEK_IN_MILLISECONDS = 604800000;
+const MONTH_IN_MILLISECONDS = 2629800000;
 
-const SingleHabit = ({ habit, isOpen, setIsOpen }) => {
-  const [loading, setLoading] = useState(false);
-
+const SingleHabit = ({ habit, isOpen, setIsOpen, setLoading }) => {
   let {
     _id,
     name,
@@ -26,10 +25,10 @@ const SingleHabit = ({ habit, isOpen, setIsOpen }) => {
     recurring,
     currentCompletion,
     goalCompletion,
-    intervalStart,
+    lastUpdated,
   } = habit;
 
-  const habitDispatch = useHabits()[1];
+  const [habitState, habitDispatch] = useHabits();
 
   const onDelete = () => {
     deleteHabit(habitDispatch, _id);
@@ -47,11 +46,13 @@ const SingleHabit = ({ habit, isOpen, setIsOpen }) => {
       ...habit,
       currentCompletion: currentCompletion + 1,
     });
-    await getHabits(habitDispatch);
-    setLoading(false);
+    setTimeout(() => {
+      setLoading(false);
+    }, 100);
   };
 
   const onDecrement = async () => {
+    setLoading(true);
     if (currentCompletion <= 1) {
       await updateHabit(habitDispatch, { ...habit, currentCompletion: "0" });
     } else {
@@ -60,106 +61,114 @@ const SingleHabit = ({ habit, isOpen, setIsOpen }) => {
         currentCompletion: currentCompletion - 1,
       });
     }
+    setTimeout(() => {
+      setLoading(false);
+    }, 100);
   };
 
   const checkIfIsComplete = async () => {
     if (currentCompletion >= goalCompletion && !isComplete) {
-      console.log("setting isComplete to true");
+      setLoading(true);
       await updateHabit(habitDispatch, {
         ...habit,
         isComplete: true,
         currentStreak: currentStreak + 1,
       });
-    }
-    if (currentCompletion < goalCompletion && isComplete) {
-      console.log("setting isComplete to false");
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
+    } else if (currentCompletion < goalCompletion && isComplete) {
       if (currentStreak <= 1) {
+        setLoading(true);
         await updateHabit(habitDispatch, {
           ...habit,
           isComplete: false,
           currentStreak: "0",
+          longestStreak: "0",
         });
+        setTimeout(() => {
+          setLoading(false);
+        }, 500);
       } else {
+        setLoading(true);
         await updateHabit(habitDispatch, {
           ...habit,
           isComplete: false,
           currentStreak: currentStreak - 1,
+          longestStreak: longestStreak - 1,
         });
+        setTimeout(() => {
+          setLoading(false);
+        }, 500);
       }
     }
   };
 
-  const checkLongestStreak = async () => {
+  const checkIfLongestStreak = async () => {
     if (longestStreak < currentStreak) {
       await updateHabit(habitDispatch, {
         ...habit,
         longestStreak: currentStreak,
       });
-    } else {
+    }
+  };
+
+  useEffect(() => {
+    checkIfIsComplete()
+      .then(() => checkIfLongestStreak())
+      .catch((err) => console.log(err));
+  }, [currentCompletion]);
+
+  const checkIfUpkeepNeeded = async () => {
+    const lastUpdatedInMilliseconds = new Date(lastUpdated).getTime();
+    // when do we expect the next upkeep?
+    let upkeepNeededAt;
+    if (recurring === "daily") {
+      upkeepNeededAt = lastUpdatedInMilliseconds + DAY_IN_MILLISECONDS;
+    } else if (recurring === "weekly") {
+      upkeepNeededAt = lastUpdatedInMilliseconds + WEEK_IN_MILLISECONDS;
+    } else if (recurring === "monthly") {
+      upkeepNeededAt = lastUpdatedInMilliseconds + MONTH_IN_MILLISECONDS;
+    }
+
+    const currentTime = Date.now();
+
+    if (currentTime > upkeepNeededAt) {
+      console.log("performing upkeep... ");
       await updateHabit(habitDispatch, {
         ...habit,
-        longestStreak: longestStreak,
+        currentCompletion: "0",
+        currentStreak: isComplete ? currentStreak : "0",
+        isComplete: false,
+        lastUpdated: Date.now(),
       });
     }
   };
 
-  const checkInterval = async () => {
-    if (recurring === "daily") {
-      recurring = DAY_IN_MILLISECONDS;
-    } else if (recurring === "weekly") {
-      recurring = WEEK_IN_MILLISECONDS;
-    } else if (recurring === "monthly") {
-      recurring = MONTH_IN_MILLISECONDS;
-    } else {
-      console.log("recurring: something went wrong");
-    }
-
-    const currentDateTime = new Date();
-    const currentDateTimeInMilliseconds = currentDateTime.getTime();
-    const timePassed = currentDateTimeInMilliseconds - intervalStart;
-
-    console.log(`time passed: ${timePassed}`);
-    console.log(`upkeep at: ${recurring}`);
-
-    if (timePassed >= recurring) {
-      console.log("🛠 time for upkeep!");
-      await handleHabitUpkeep();
-    }
-  };
-
-  const handleHabitUpkeep = async () => {
-    const updatedCurrentStreakVal = isComplete === true ? currentStreak : 0;
-
-    await updateHabit(habitDispatch, {
-      ...habit,
-      currentCompletion: 0,
-      isComplete: false,
-      intervalStart: Date.now(),
-      currentStreak: updatedCurrentStreakVal,
-    });
-  };
-
   useEffect(() => {
-    checkIfIsComplete();
-  }, [currentCompletion]);
+    checkIfUpkeepNeeded();
+  }, []);
 
   return (
-    <div className="flex mb-8">
-      <div className="pr-20">
-        <h3 className="text-xl font-semibold mb-2">{name}</h3>
-        <p className="text-md">{description}</p>
+    <div className="flex mb-8 bg-slate-600 p-6 rounded-xl border-4 border-black">
+      <div className="pr-20 w-[500px]">
+        <h3 className="text-2xl font-semibold mb-2">{name}</h3>
+        <p className="text-sm">{description}</p>
         <p className="pt-4">
-          current streak:{" "}
+          <span className="font-semibold">current streak:</span>{" "}
           {currentStreak > 0 ? `${currentStreak} 🔥` : currentStreak}
         </p>
         <p className="pt-4">
-          longest streak:{" "}
-          {longestStreak > 0 ? `${longestStreak} 🔥` : longestStreak}
+          <span className="font-semibold">longest streak:</span>{" "}
+          {longestStreak > 0 ? `${longestStreak} ⭐️` : longestStreak}
         </p>
         <p className="pt-4">
-          completion status: {isComplete ? "true" : "false"}
+          <span className="font-semibold">complete:</span>{" "}
+          {isComplete ? "true ✅" : "false ❌"}
         </p>
-        <p className="pt-4">recurring: {recurring}</p>
+        <p className="pt-4">
+          recurring: <span className="italic">{recurring}</span>
+        </p>
       </div>
       <div className="flex flex-col">
         <button
@@ -176,10 +185,10 @@ const SingleHabit = ({ habit, isOpen, setIsOpen }) => {
         </button>
         <div className="flex justify-between mx-6">
           <button onClick={onDecrement}>
-            <i className="fa-solid fa-square-minus text-4xl p-2 active:scale-95"></i>
+            <i className="fa-solid fa-square-minus text-4xl p-2 active:scale-95 text-black"></i>
           </button>
           <button onClick={onIncrement}>
-            <i className="fa-solid fa-square-plus text-4xl p-2 active:scale-95"></i>
+            <i className="fa-solid fa-square-plus text-4xl p-2 active:scale-95 text-black"></i>
           </button>
         </div>
         <div className="flex flex-row justify-center my-4 text-2xl font-semibold">

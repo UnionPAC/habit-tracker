@@ -63,7 +63,7 @@ const Modal = ({ isOpen, setIsOpen }) => {
           }}
           className="fixed top-6 right-8"
         >
-          <i className="fa-solid fa-x cursor-pointer text-gray-600"></i>
+          <i className="fa-solid fa-x cursor-pointer text-gray-800"></i>
         </button>
         <form
           onSubmit={handleSubmit}
@@ -73,7 +73,7 @@ const Modal = ({ isOpen, setIsOpen }) => {
             {current ? "update habit" : "add habit"}
           </h2>
           <label
-            className="text-sm py-2 text-gray-700 font-semibold"
+            className="text-sm py-2 text-black"
             htmlFor="name"
           >
             name
@@ -89,7 +89,7 @@ const Modal = ({ isOpen, setIsOpen }) => {
             className="border-b-2 border-gray-100 focus:outline-none mb-8 py-1"
           />
           <label
-            className="text-sm py-2 text-gray-700 font-semibold"
+            className="text-sm py-2 text-black"
             htmlFor="description"
           >
             description
@@ -106,7 +106,7 @@ const Modal = ({ isOpen, setIsOpen }) => {
           />
 
           <label
-            className="text-sm py-2 text-gray-700 font-semibold"
+            className="text-sm py-2 text-black"
             htmlFor="recurring"
           >
             how often will this habit recur?
@@ -115,7 +115,7 @@ const Modal = ({ isOpen, setIsOpen }) => {
             name="recurring"
             value={recurring || ""}
             onChange={handleChange}
-            className="border-b-2 border-gray-100 focus:outline-none mb-8 py-1"
+            className="border-b-2 border-gray-100 focus:outline-none mb-12 py-1"
           >
             <option value="daily">daily</option>
             <option value="weekly">weekly</option>
@@ -123,7 +123,7 @@ const Modal = ({ isOpen, setIsOpen }) => {
           </select>
 
           <label
-            className="text-sm py-2 text-gray-700 font-semibold"
+            className="text-sm py-2 text-black"
             htmlFor="goalCompletion"
           >
             how many times do you want to perform this habit?

@@ -26,6 +26,7 @@ export const getHabits = async (dispatch) => {
     dispatch({
       type: GET_HABITS,
       payload: res.data,
+      loading: false,
     });
   } catch (error) {
     dispatch({

@@ -73,6 +73,7 @@ router.put("/:id", auth, async (req, res) => {
     isComplete,
     currentStreak,
     longestStreak,
+    lastUpdated,
   } = req.body;
 
   // Build habit object
@@ -90,8 +91,8 @@ router.put("/:id", auth, async (req, res) => {
   }
   if (currentStreak) habitFields.currentStreak = currentStreak;
   if (longestStreak) habitFields.longestStreak = longestStreak;
+  if (lastUpdated) habitFields.lastUpdated = lastUpdated;
 
-  
   try {
     let habit = await Habit.findById(req.params.id);
 

@@ -3,10 +3,6 @@ import { Navigate } from "react-router-dom";
 import { clearErrors, useAuth, loginUser } from "../../context/auth/AuthState";
 import AlertContext from "../../context/alert/alertContext";
 
-// potential login errors
-// 1. no user found with that email
-// 2. invalid login & password
-
 const Login = () => {
   const alertContext = useContext(AlertContext);
   const [authState, authDispatch] = useAuth();
