@@ -5,7 +5,6 @@ const config = require("config");
 // const db = config.get("mongoURI");
 require("dotenv").config();
 const mongoURI = process.env.mongoURI;
-const jwtSecret = process.env.jwtSecret;
 
 const connectDB = async () => {
   try {
