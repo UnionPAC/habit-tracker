@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const config = require("config");
-const jwtSecret = process.env.jwtSecret;
+const jwtSecret = config.get("jwtSecret");
 
 // is a function that has access to the req/res cycle
 // we can fire of this middleware, when we hit and endpoint
